@@ -23,38 +23,13 @@
 
 #include <Eigen/Dense>
 #include <gazebo/gazebo.hh>
-#include <glog/logging.h>
+#include <mav_msgs/default_topics.h>
 
 namespace gazebo {
 
-/**
- * \brief Helper Singleton to initialize Glog only once.
- */
-class InitGlogHelper
-{
-public:
-   static InitGlogHelper& instance()
-   {
-      static InitGlogHelper _instance;
-      return _instance;
-   }
-   ~InitGlogHelper() {}
-
-   void initGlog() {
-     static bool glog_initialized = false;
-
-     if(!glog_initialized) {
-       google::InitGoogleLogging("gazebo_plugins_glogger");
-       glog_initialized = true;
-     }
-   }
-private:
-   InitGlogHelper() {}
-   InitGlogHelper(const InitGlogHelper&);
-   InitGlogHelper & operator = (const InitGlogHelper&);
-};
-
-
+// Default values
+static const std::string kDefaultNamespace = "";
+static constexpr double kDefaultRotorVelocitySlowdownSim = 10.0;
 
 /**
  * \brief Obtains a parameter from sdf.
@@ -80,8 +55,6 @@ bool getSdfParam(sdf::ElementPtr sdf, const std::string& name, T& param, const T
 }
 
 }
-
-
 
 template <typename T>
 class FirstOrderFilter {
